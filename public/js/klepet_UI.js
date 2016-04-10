@@ -26,19 +26,27 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     sporocilo = filtirirajVulgarneBesede(sporocilo);
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
     var regSl = new RegExp('\\b'+'\(http://|https://)(.*?)(.jpg|.png|.gif)'+'\\b','gi');
-     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
-     var tabela = sporocilo.toString().match(regSl);
-     var i = 0;
-     if (tabela != null){
+    $('#sporocila').append(divElementEnostavniTekst(sporocilo));
+    var tabela = sporocilo.toString().match(regSl);
+    var i = 0;
+    if (tabela != null){
         while(i < tabela.length) {
            $('#sporocila').append(divElementHtmlTekst("<img class=\"slika\" src =\""+tabela[i]+"\">"));
            i++;
         }
-     }
-     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
- }
-  
-
+    }
+    var regYt = new RegExp('\\bhttps://www.youtube.com/watch\\?v=(.{11})\\b', 'gi');
+    var tabelaYt = sporocilo.toString().match(regYt);
+    var j = 0;
+    if (tabelaYt != null){
+       while(j < tabelaYt.length) {
+          var id = tabelaYt[j].slice(-11);
+          $('#sporocila').append(divElementHtmlTekst('<iframe src="https://www.youtube.com/embed/'+ id +'" allowfullscreen class="youtube" "></iframe>'));
+          j++;
+       }
+    }
+    $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+  }
   $('#poslji-sporocilo').val('');
 }
 
@@ -94,6 +102,16 @@ $(document).ready(function() {
          $('#sporocila').append(divElementHtmlTekst("<img class=\"slika\" src =\""+tabela[i]+"\">"));
          i++;
       }
+    }
+    var regYt = new RegExp('\\bhttps://www.youtube.com/watch\\?v=(.{11})\\b', 'gi');
+    var tabelaYt = sporocilo.besedilo.toString().match(regYt);
+    var j = 0;
+    if (tabelaYt != null){
+       while(j < tabelaYt.length) {
+          var id = tabelaYt[j].slice(-11);
+          $('#sporocila').append(divElementHtmlTekst('<iframe src="https://www.youtube.com/embed/'+ id +'" allowfullscreen class="youtube" "></iframe>'));
+          j++;
+       }
     }
   });
   
